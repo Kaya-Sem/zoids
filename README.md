@@ -1,4 +1,4 @@
-# boids
+# Zoids
 
 ### This is a fork of [cubedhuang/boids](https://github.com/cubedhuang/boids) modified to use Zauth, Pictures and Zeus theme.
 
