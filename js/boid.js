@@ -171,13 +171,18 @@ class Boid extends V2D {
 		this.shape.y = this.y;
 		this.shape.rotation = this.vel.angle();
 
-		if (opt.hues)
-			this.shape.tint = hsv(
-				constrain(this.vel.mag() / (opt.maxSpeed * 2), 0, 1),
-				1,
-				1
-			);
-		else this.shape.tint = 0xffffff;
+		if (opt.hues) {
+			// Calculate speed ratio (0 to 1)
+			const speedRatio = constrain(this.vel.mag() / opt.maxSpeed, 0, 1);
+			
+			// For faster boids (orange): hue = 0.08 (orange-red), saturation = 1, value = 1
+			// For slower boids (grey): hue = 0, saturation = 0, value = 0.05 (almost invisible)
+			const hue = 0.08; // Orange-red hue
+			const saturation = speedRatio * 1.5; // Increased saturation range for more vibrant oranges
+			const value = 0.05 + (speedRatio * 0.95); // Almost invisible greys, bright oranges
+			
+			this.shape.tint = hsv(hue, saturation, value);
+		} else this.shape.tint = 0xffffff;
 
 		if (opt.desired && this.acc.sqrMag() > 0.01) {
 			this.desired.alpha = 0.5;
@@ -194,11 +199,11 @@ class Boid extends V2D {
 			if (!opt.hideBoids) {
 				this.shape.beginFill(0xffffff);
 				this.shape.lineStyle();
-				this.shape.moveTo(6, 0);
-				this.shape.lineTo(-6, -4);
-				this.shape.lineTo(-4, 0);
-				this.shape.lineTo(-6, 4);
-				this.shape.lineTo(6, 0);
+				this.shape.moveTo(12, 0);
+				this.shape.lineTo(-12, -8);
+				this.shape.lineTo(-8, 0);
+				this.shape.lineTo(-12, 8);
+				this.shape.lineTo(12, 0);
 				this.shape.endFill();
 			}
 
